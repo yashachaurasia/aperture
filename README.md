@@ -10,7 +10,7 @@ A simplified Field Status feature that tells growers whether a field needs irrig
 
 ```bash
 git clone <repo-url>
-cd aperture-takehome
+cd aperture
 make up
 ```
 
