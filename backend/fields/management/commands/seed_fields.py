@@ -20,6 +20,12 @@ SAMPLE_FIELDS = [
         "stress_threshold": 0.18,
         "ideal_soil_moisture": 0.24,
     },
+    {
+        "name": "West Field",
+        "current_soil_moisture": 0.25,
+        "stress_threshold": 0.18,
+        "ideal_soil_moisture": 0.24,
+    }
 ]
 
 
