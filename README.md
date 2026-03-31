@@ -125,10 +125,10 @@ Adding a PostGIS `PolygonField` to the `Field` model would allow field status to
 Currently `stress_threshold` and `ideal_soil_moisture` are set at the database level. A natural next step would be exposing these as editable inputs in the UI, backed by an update endpoint, so growers can tune their own thresholds without any technical knowledge.
 
 **Push notifications**
-When a field crosses into "Consider Irrigating," the grower should be notified proactively rather than having to check the dashboard. This maps directly to the notification system mentioned in Aperture's role description.
+When a field crosses into "Consider Irrigating," the grower should be notified proactively rather than having to check the dashboard.
 
 **Row-level tenancy**
-In production, each grower should only see their own fields. This would be implemented via Django's custom manager pattern with a `FarmAccount` foreign key — consistent with Aperture's multi-tenant architecture.
+In production, each grower should only see their own fields. This would be implemented via Django's custom manager pattern with a `FarmAccount` foreign key.
 
 ---
 
