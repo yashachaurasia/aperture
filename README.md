@@ -81,7 +81,7 @@ The "Investigate" zone exists because conditions between the stress floor and id
 
 ### Why status is computed, not stored
 
-Status is derived from current data — storing it would create a consistency risk (stored status could become stale if moisture readings update). The `status` and `explanation` fields are computed at read time in the Django serializer via `SerializerMethodField`.
+Status is derived from current data — storing it would create a consistency risk (stored status could become stale if moisture readings update). The `status` and `explanation` fields are computed at request time in `fields/logic.py` and attached to the response in the view. The view handles HTTP concerns; the logic module handles domain reasoning — keeping them cleanly separated.
 
 ---
 
@@ -115,6 +115,6 @@ In production, each grower should only see their own fields. This would be imple
 
 ## Tech Stack
 
-- **Backend:** Python 3.11, Django 4.2, Django REST Framework, PostgreSQL + PostGIS
+- **Backend:** Python 3.11, Django 4.2, PostgreSQL + PostGIS
 - **Frontend:** React 18 (Create React App)
 - **Infrastructure:** Docker Compose (single-command setup)
