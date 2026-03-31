@@ -81,7 +81,7 @@ The "Investigate" zone exists because conditions between the stress floor and id
 
 ### Why status is computed, not stored
 
-Status is derived from current data — storing it would create a consistency risk (stored status could become stale if moisture readings update). The `status` and `explanation` fields are computed at request time in `fields/logic.py` and attached to the response in the view. The view handles HTTP concerns; the logic module handles domain reasoning — keeping them cleanly separated.
+Status is derived from current data — storing it would create a consistency risk (stored status could become stale if moisture readings update). The `status` and `explanation` fields are computed at request time in `fields/recommendation.py` and attached to the response in the view. The view handles HTTP concerns; the logic module handles domain reasoning — keeping them cleanly separated.
 
 ---
 
