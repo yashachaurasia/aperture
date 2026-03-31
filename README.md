@@ -122,7 +122,7 @@ A single moisture reading is a snapshot. Real irrigation decisions are made on d
 Adding a PostGIS `PolygonField` to the `Field` model would allow field status to be overlaid on a map — which is the natural product evolution and consistent with Aperture's stack. TiTiler could serve the soil moisture rasters, and the field boundaries would provide the spatial context.
 
 **Threshold configuration via UI**
-Currently `stress_threshold` and `ideal_soil_moisture` live in the database and can only be changed via the API. Exposing editable inputs in the UI would let growers tune their own thresholds — an important usability improvement for non-technical users.
+Currently `stress_threshold` and `ideal_soil_moisture` are set at the database level. A natural next step would be exposing these as editable inputs in the UI, backed by an update endpoint, so growers can tune their own thresholds without any technical knowledge.
 
 **Push notifications**
 When a field crosses into "Consider Irrigating," the grower should be notified proactively rather than having to check the dashboard. This maps directly to the notification system mentioned in Aperture's role description.
