@@ -40,7 +40,7 @@ Open `http://localhost:8000/api/fields/` to inspect the raw API response.
 
 All configuration is managed via environment variables. Docker Compose reads from a `.env` file at the project root and falls back to sensible defaults if the file is absent — so the project runs out of the box without any setup.
 
-A `.env.example` is included with the default values:
+A `.env.example` is included with the default values and `make up` command copies it to the `.env`. The `.env` file is gitignored and should never be committed.
 
 ```bash
 POSTGRES_DB=aperture_db
@@ -53,7 +53,7 @@ REACT_APP_API_URL=http://localhost:8000
 PORT=3005
 ```
 
-Copy it to `.env` if you want to override any values. The `.env` file is gitignored and should never be committed.
+Copy your own `.env` if you want to override any values.
 
 ---
 
@@ -91,6 +91,25 @@ Status is derived from current data — storing it would create a consistency ri
 - `stress_threshold` and `ideal_soil_moisture` are user-defined per field, not derived from soil type or crop species. In production, these would be set by the grower or informed by field-specific calibration.
 - No authentication is implemented, as specified.
 - The `Field` model intentionally omits a geometry column, but is designed to support a PostGIS `PolygonField` for farm boundary overlays — a natural next step given Aperture's geospatial stack.
+
+---
+
+## Product Decisions & Tradeoffs
+
+**Status computed at request time, not stored**
+At this scale, computing status on every request is negligible. It also avoids stale data bugs — stored status would need to be recomputed whenever moisture values change. Given the time constraint, I went with run time status computation. But, at higher scale, the better pattern is to compute and store status at write time rather than read time, so reads are always instant regardless of load.
+
+**Rule-based logic over ML**
+Within the scope of this exercise, rule-based logic is the right fit. The inputs are well-defined, the thresholds are user-provided, and the output needs to be immediately understandable to a non-technical farmer. The tradeoff is that it only looks at the current snapshot — two fields at the same moisture level get the same status, even if one has been dropping steadily for three days and the other has been stable. In future, ML model outputs, if available, could be incorporated alongside the rule-based logic — for example, using predicted moisture trajectory to adjust the urgency of an Investigate recommendation while keeping the final status simple and explainable.
+
+**Explanation string owned by the backend**
+The human-readable explanation is generated in `recommendation.py`, not constructed on the frontend. This means copy changes, localization, or logic refinements happen in one place — the API — without requiring a frontend deploy.
+
+**`updated_at` on the Field model**
+Not in the original sample data, but added deliberately. A soil moisture recommendation is only meaningful in the context of when the reading was taken — stale data with no timestamp could lead a farmer to act on outdated information. This field is the foundation for showing data freshness in the UI ("Last updated 2 hours ago"), which becomes critical as the product matures.
+
+**PostGIS over plain Postgres**
+The exercise doesn't require geospatial queries, but using PostGIS signals that the `Field` model is designed to grow. Adding a `PolygonField` for farm boundaries is a one-line model change — the infrastructure is already there.
 
 ---
 
